@@ -1,0 +1,22 @@
+@@ -0,0 +1,15 @@
++user_pref("ui.key.menuAccessKey", 0);
++user_pref("media.autoplay.default", 0);
++user_pref("signon.rememberSignons", false);
++user_pref("extensions.pocket.enabled", false);
++user_pref("identity.fxaccounts.enabled", false);
++user_pref("devtools.inspector.three-pane-enabled", false);
++user_pref("devtools.inspector.activeSidebar", "ruleview");
++user_pref("devtools.toolbox.host", "right");
++user_pref("devtools.selfxss.count", 5);
++user_pref("devtools.theme", "dark");
++user_pref("network.trr.custom_uri", "https://9.9.9.9/dns-query");
++user_pref("network.trr.mode", 3);
++user_pref("browser.uidensity", 1);
++user_pref("browser.ctrlTab.recentlyUsedOrder", false);
++user_pref("browser.newtabpage.activity-stream.feeds.system.topsites", false);
+@@ -90 +105 @@
+-user_pref("browser.startup.page", 0);
++user_pref("browser.startup.page", 1);
+@@ -95 +110 @@
+-user_pref("browser.startup.homepage", "about:blank");
++user_pref("browser.startup.homepage", "http://localhost/");

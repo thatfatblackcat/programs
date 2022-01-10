@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+base=https://github.com/arkenfox
+usjs=/user.js/raw/master/user.js
+prof=~/.mozilla/firefox/hardened
+
+while [ $# -gt 0 ]; do case $1 in
+--file|-f) shift; file=$1 ;;
+--diff|-d) shift; diff=$1 ;;
+--prof|-p) shift; prof=$1 ;;
+esac; shift; done
+
+! ping -c 1 'github.com' > /dev/null 2>&1 &&
+	echo Device is not connected to the internet, \
+	aborting ✗✗ 1>&2 && exit 1
+
+# shellcheck disable=SC2015,SC2164
+[ ! -d "$prof" ] && echo No such directory "'${prof##*/}'", \
+	aborting ✗✗ 1>&2 && exit 1 || cd "$prof"
+
+while pgrep firefox\|GeckoMain > /dev/null 2>&1; do time=$((time + 1))
+	echo Firefox might still be opened, currently waiting …
+	[ $time -eq 10 ] && echo Reached timeout, \
+	aborting ✗✗ 1>&2 && exit 1
+sleep 3; done
+
+curl -Lso user.js "${file:-$base$usjs}"
+[ -f "$diff" ] && patch user.js "$diff"
+cp -t /tmp user.js prefs.js 2>/dev/null
+
+grep -s 'uiCustomization\|webextensions' /tmp/prefs.js > prefs.js
+sed '/\/\*.*\*\//d;/\/\*/,/\*\//d;s/);.*/);/g;/\s\/\//d;
+	/parrot/d;/^$/d' /tmp/user.js | sort -h > user.js
+
+[ -f user.js.rej ] && [ -x /usr/bin/notify-send ] &&
+	notify-send "Script userjs-dl says:" \
+	"Your user.js hasn't been patched correctly ✗✗"

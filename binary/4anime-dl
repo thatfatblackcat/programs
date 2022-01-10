@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+download() {
+echo Downloading "$title" "$pad$cnt" ...
+! ytdl "${1:-"https://4anime.to/$title"}" > /dev/null 2>&1 &&
+	echo Could not be downloaded ✗ 1>&2 && return 1 ||
+	echo Successfully downloaded ✓ 1>&1
+}
+
+template() {
+	[ "$1$cnt" -lt 10 ] && pad=0 || unset pad
+	echo "https://4anime.to/$title-episode-$pad$cnt"
+}
+
+research() {
+while download "$(template "$1")"; do cnt=$(($cnt + 1))
+done; echo Finished downloading all episodes ✓✓ 1>&2
+}
+
+alias head='curl -sI > /dev/null'
+alias ytdl='youtube-dl -i -o "%(title)s.%(ext)s"'
+
+until [ $# -eq 0 ]; do title=$1 && shift; cnt=1 && unset pad
+	if   head "https://4anime.to/$title-episode-1 "; then research 0
+	elif head "https://4anime.to/$title-episode-01"; then research 1
+	elif head "https://4anime.to/$title"; then download
+	else echo Bad title or connection, skipping ✗✗ 1>&2; fi; done
