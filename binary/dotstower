@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+helpme() {
+cat << __EOF__
+dotstower: dotstower [-hdnv] [arg ...]
+Dotfile manager written in POSIX shell
+
+  -h  Instruct me on how to use this
+  -d  Keep dotfiles stowed each minute
+  -n  Explain what happens if executed
+  -v  Tell me about what's happening
+
+Alternative script to GNU Stow for managing dotfiles
+on systems with multiple window managers installed
+__EOF__
+}
+
+stower() {
+tr -s [:blank:] \\n < "$FILE" | while read -r SRC DST; do
+	[ ! -d "$DST" ] && "$NOPE $1 $VERB" ||
+	echo >&2 "dotstower: cannot $1 '${DST##*/}'"
+done
+}
+
+daemon() {
+while true; do
+	stower restow && sleep 60
+done
+}
+
+alias restow="ln -s \$SRC \$DST"
+alias unstow="rm -d       \$DST"
+
+trap '[ -n "$DEMO" ] &&
+	stower unstow && exit 0' EXIT
+
+set -- $(getopt -q hdnv "$@")
+while [ $# -ne 0 ]; do
+	case $1 in
+	-h) helpme && exit 0 ;;
+	-d) DEMO=$1; shift 1 ;;
+	-n) NOPE=$1; shift 1 ;;
+	-v) VERB=$1; shift 1 ;;
+	--) shift 1; break 2 ;;
+	esac
+done
+
+[ -f "$1" ] && FILE="$1" || exit 1
+[ -n "$NOPE" ] && NOPE="echo"
+[ -n "$DEMO" ] && daemon || stower restow

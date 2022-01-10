@@ -1,0 +1,17 @@
+:root {
+	--txt-regular: #CCC; --txt-reverse: #DDD; --lnk-regular: #8EB;
+	--bkg-regular: #222; --bkg-reverse: #333; --lnk-reverse: #2BB;
+} html {
+	max-width: 720px; font-size: 18px;
+	margin: 1em auto; padding: 0 .3em;
+} body {
+	background: var(--bkg-regular); color: var(--txt-regular);
+	font-family: "Merriweather", sans-serif; line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6, th {
+	background: inherit; color: var(--txt-reverse);
+	font-family: "Montserrat", sans-serif;
+} mark, ::selection {
+	background: var(--bkg-reverse); color: inherit;
+}
