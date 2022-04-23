@@ -1,0 +1,31 @@
+.TH "USERJS-DL" "1" "February 2022" "thatfatblackcat" "General Commands Manual"
+.hy
+.SH NAME
+.PP
+userjs-dl — updates firefox user.js template using cronjobs
+.SH SYNOPSIS
+.PP
+\f[B]userjs-dl\f[R] [\f[B]-f\f[R] file] [\f[B]-d\f[R] diff] [\f[B]-p\f[R] prof]
+.SH DESCRIPTION
+.PP
+Make a backup of your profile before executing, just in case.
+.PD 0
+.P
+.PD
+If you find some bugs, open an issue on GitHub and I'll take care.
+.PP
+\f[B]-h\f[R] http    Location of user.js template. \
+Default points to 'arkenfox'.
+.PP
+\f[B]-p\f[R] prof    Path to firefox profile directory. \
+Default points to 'hardened'.
+.PP
+\f[B]-d\f[R] diff    Path to user.js diff/patch file. \
+Default is disabled (/dev/null).
+.SH LICENSING
+.PP
+Licensed under ISC by TFBC, published at
+.PD 0
+.P
+.PD
+https://github.com/thatfatblackcat/programs

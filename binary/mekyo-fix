@@ -1,0 +1,30 @@
+#!/bin/sed -f
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+/さておき五段/d; /（造）\\n/d
+
+s/,\[.*】\\n/,["/g
+s/,\[.*》\\n/,["/g
+s/,\[.*〕\\n/,["/g
+s/,\[.*〙\\n/,["/g
+
+s/【[^】]*】//g
+s/「[^」]*」//g
+s/『[^』]*』//g
+s/〔[^」]*〕//g
+s/〘[^〙]*〙//g
+s/〈[^〉]*〉//g
+s/《[^》]*》//g
+s/（[^）]*）//g
+s/［[^］]*］//g
+
+s/③.*\\n/\\n/
+s/◇.*\\n/\\n/
+s/◆.*\\n/\\n/
+s/▽.*\\n/\\n/
+s/▼.*\\n/\\n/
+
+s/Meikyou1/meikyou/
+s/  //g; s/\\n//g

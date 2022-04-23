@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+subtitle() {
+case "$sub" in
+*.srt) tac "$sub" | sed '/-->/,+1d' | tac ;;
+*.vtt) sed '/WEBVTT/,/^$/d;/STYLE/,/^$/d;/NOTE/,/^$/d;/-->/d' "$sub" ;;
+esac | sed '/^$/d;s/^/<p>/;s/$/<\/p>/'
+}
+
+external() {
+cat << __EOF__
+	<meta charset="utf-8"> <meta name="viewport"
+		content="width=device-width, initial-scale=1">
+	<style>
+		html { background: #FFFFFF; color: #000000 }
+		body { font-family: sans-serif; margin: auto; max-width: 680px }
+	</style>
+__EOF__
+}
+
+template() {
+cat << __EOF__
+<!DOCTYPE html>
+<html> <head>
+$(external)
+</head> <body>
+$(subtitle)
+</body> </html>
+__EOF__
+}
+
+for sub in "$@"; do dos2unix "$sub" && template "$sub" > "${sub%.*}.htm"; done

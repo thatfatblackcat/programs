@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+helpmeuse() {
+cat << __EOF__
+1337x-wtf: 1337x-wtf -- no arguments required
+Watch torrented movies without a subscription
+
+Make sure these programs are installed:
+(1) dmenu -- suckless utility
+(2) webtorrent / transmission
+
+This script is a fork of notflix featuring actual
+comprehensible shell code
+__EOF__
+}
+
+searching() {
+curl -s "https://1337x.wtf/search/$QUERY/1/" | grep -E '/torrent/' |
+	sed -E 's#.*(/torrent/.*)/">.*/#\1#;s#td>##g' | tee "$CACHE/links"
+}
+
+selecting() {
+searching | sed 's/^.*\///;s/-/ /g' |
+	dmenu -p notflix -l 20 | sed 's/ /-/g'
+}
+
+getmagnet() {
+curl -s "https://1337x.wtf$(grep "$(selecting)" "$CACHE/links")/" |
+	grep -Eo "magnet:\?xt=urn:btih:[a-zA-Z0-9]*" | head -n1
+}
+
+CACHE=${XDG_CACHE_HOME:-$HOME/.cache}/notflix && mkdir -p "$CACHE" >&-
+QUERY=$(dmenu -p search <&- | tr ' ' '+')
+
+command -v webtorrent &&
+	webtorrent --mpv "$(getmagnet)" 2>&- ||
+	transmission-cli "$(getmagnet)" 2>&- || helpmeuse

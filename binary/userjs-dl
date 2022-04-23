@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+PROF=$HOME/.mozilla/firefox/hardened
+HTTP=https://github.com/arkenfox/user.js/raw/master/user.js
+
+! getopt -q h:p:d: "$@" && echo 1>&2 \
+	"${0##*/}: ${0##*/} [-h http] [-p prof] [-d diff]" && exit 2
+
+while [ $# -ne 0 ]; do
+	case $1 in
+	-h) HTTP=$2; shift 2 ;;
+	-p) PROF=$(readlink -f "$2"); shift 2 ;;
+	-d) DIFF=$(readlink -f "$2"); shift 2 ;;
+	esac
+done
+
+for seq in $(seq -w 10 -01 01); do sleep 1
+	! pgrep GeckoMain > /dev/null 2>&1 && break || (echo 1>&2 \
+	"Firefox appears to be open, out $seq" && return 1)
+done || exit 2
+
+! cd "$PROF" && echo 1>&2 \
+	"Directory doesnt exist or accessible ✗✗" && exit 2
+
+! curl -Lso user.js "$HTTP" && echo 1>&2 \
+	"Temporary failure in name resolution ✗✗" && exit 2
+
+patch user.js "${DIFF:-/dev/null}" || notify-send \
+	"Script ${0##*/}" "Template rejected diff/patch ✗✗"
+
+sed -i '/uiCustomization\|webextensions/!d' prefs.js
+sed -i 's|);.*|);|g;\|/\*.*\*/|d;\|/\*|,\|\*/|d;\|\s//|d;\|^$|d' user.js

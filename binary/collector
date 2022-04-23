@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+collection() {
+	gallery-dl -g "$PIXIV/bookmarks/artworks/$1" |
+		while read -r line; do gallery-dl "$line"; done
+}
+
+PIXIV="https://www.pixiv.net/users/55851823"
+(cd ~/artworks && gallery-dl $PIXIV/following)
+(cd ~/tatenaga && collection '縦長')
+(cd ~/yokonaga && collection '横長')
+
+alias audio='youtube-dl -io "%(upload_date)s.%(id)s.%(ext)s" -f bestaudio'
+alias video='youtube-dl -io "%(upload_date)s.%(id)s.%(ext)s"'
+
+for i in ~/channels/PLwhO4rHqTKX*; do (cd "$i" && audio "${i##*/}"); done
+for i in ~/channels/PLBRObSmbZlu*; do (cd "$i" && video "${i##*/}"); done
