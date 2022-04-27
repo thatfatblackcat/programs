@@ -13,6 +13,8 @@ Read the 's/manual/code/g' before asking questions.
 
 `mekyo-fix` — (japanese) deletes brackets and formats on one line
 
+`statusbar` — displays battery status and date on window managers
+
 `subs2html` — converts srt and vtt subtitles to web documents
 
 `userjs-dl` — updates firefox user.js template using cronjobs
@@ -26,6 +28,8 @@ Read the 's/manual/code/g' before asking questions.
 `collector` — youtube-dl, gallery-dl
 
 `mekyo-fix` — only sed
+
+`statusbar` — xsetroot
 
 `subs2html` — dos2unix
 

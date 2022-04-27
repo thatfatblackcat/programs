@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+while sleep 1; do
+	cd /sys/class/power_supply/BAT0/ || exit 1
+	BAT0="$(cat status) $(cat capacity)%"
+	xsetroot -name " $BAT0 | $(date '+%Y %B %d %A %I:%M %p') "
+done
