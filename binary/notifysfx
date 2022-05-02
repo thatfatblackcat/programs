@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Licensed under ISC by TFBC, published at
+# https://github.com/thatfatblackcat/programs
+
+URL=https://themushroomkingdom.net/sounds/wav/smb/smb_coin.wav
+
+cd "${XDG_CACHE_HOME:-$HOME/.cache}"
+[ ! -f "${0##*/}" ] && curl -o "${0##*/}" "$URL"
+paplay "${0##*/}"
